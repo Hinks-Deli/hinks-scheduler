@@ -131,7 +131,7 @@ export default function App() {
               </span>
             </div>
             <h1 style={{ fontSize: 20, fontWeight: 800, color: '#eef4f0', letterSpacing: -0.5 }}>
-              Restaurant Staff Scheduler
+              Hink's Staff Scheduler
             </h1>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
