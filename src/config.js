@@ -4,37 +4,38 @@ export const ALL_DAY_NAMES = [
 ];
 
 // ── Default roles ──
-export const DEFAULT_ROLES = ['Chef', 'FOH', 'Mix'];
+export const DEFAULT_ROLES = ['Chef', 'FOH', 'Mix', 'Assembly'];
 
 // ── Default employees ──
 export const DEFAULT_EMPLOYEES = [
-  { name: 'Alex',  roles: ['Chef'],         active: true },
-  { name: 'Blake', roles: ['Chef', 'Mix'],  active: true },
-  { name: 'Casey', roles: ['FOH'],          active: true },
-  { name: 'Dana',  roles: ['FOH', 'Mix'],   active: true },
+  { name: 'Nico',  roles: ['Chef', 'Mix', 'FOH', 'Assembly'], active: true },
+  { name: 'Sabine', roles: ['Chef',],  active: true },
+  { name: 'Joao', roles: ['FOH', 'Assembly', 'Mix'],          active: true },
+  { name: 'Girl',  roles: ['FOH'],   active: true },
 ];
 
 // ── Default day configs ──
 const LONG_DAY_RULES = [
-  { roles: ['Chef', 'Mix'], count: 2, from: 10, to: 12 },
-  { roles: ['Any'],         count: 3, from: 12, to: 22 },
-  { roles: ['Any'],         count: 2, from: 21, to: 22 },
+  { roles: ['Chef'], count: 1, from: 10, to: 12 },
+  { roles: ['Chef', 'Mix', 'Assembly'],         count: 2, from: 12, to: 22 },
+  { roles: ['FOH'],         count: 1, from: 10, to: 22 },
+  { roles: ['Any'],         count: 2, from: 22, to: 23 },
 ];
 
 export const DEFAULT_DAYS = [
   {
-    name: 'Tuesday', open: 10, close: 18, enabled: true,
+    name: 'Wednesday', open: 10, close: 18, enabled: true,
     rules: [{ roles: ['Chef'], count: 1, from: 10, to: 18 }],
   },
-  ...['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(name => ({
-    name, open: 10, close: 22, enabled: true,
+  ...['Thursday', 'Friday', 'Saturday', 'Sunday'].map(name => ({
+    name, open: 10, close: 23, enabled: true,
     rules: LONG_DAY_RULES.map(r => ({ ...r, roles: [...r.roles] })),
   })),
 ];
 
 // ── Global defaults ──
 export const DEFAULT_GLOBALS = {
-  maxPerDay: 8,
+  maxPerDay: 10,
   weeklyTarget: 40,
 };
 
@@ -45,7 +46,7 @@ export const ROLE_COLORS = {
   Mix:     { t: '#e0b8f0', a: '#a06bc4', b: '#3a1850' },
   Any:     { t: '#a0c8f0', a: '#5b8ab8', b: '#182e4a' },
   Cleaner: { t: '#c8a0f0', a: '#8a5bb8', b: '#30185a' },
-  Bar:     { t: '#f0a0c0', a: '#b85b7a', b: '#4a1828' },
+  Assembly: { t: '#f0a0c0', a: '#b85b7a', b: '#4a1828' },
   Manager: { t: '#f0e8a0', a: '#b8a05b', b: '#4a4418' },
   KP:      { t: '#a0e8e0', a: '#5bb8b0', b: '#184a44' },
 };
