@@ -1,0 +1,76 @@
+{
+  "maxPerDay": 8,
+  "weeklyTarget": 40,
+  "employees": [
+    { "name": "Alex",  "roles": ["Chef"],         "active": true },
+    { "name": "Blake", "roles": ["Chef", "Mix"],   "active": true },
+    { "name": "Casey", "roles": ["FOH"],           "active": true },
+    { "name": "Dana",  "roles": ["FOH", "Mix"],    "active": true }
+  ],
+  "days": [
+    {
+      "name": "Tuesday",
+      "open": 10,
+      "close": 18,
+      "enabled": true,
+      "rules": [
+        { "roles": ["Chef"], "count": 1, "from": 10, "to": 18 }
+      ]
+    },
+    {
+      "name": "Wednesday",
+      "open": 10,
+      "close": 22,
+      "enabled": true,
+      "rules": [
+        { "roles": ["Chef", "Mix"], "count": 2, "from": 10, "to": 12 },
+        { "roles": ["Any"],         "count": 3, "from": 12, "to": 22 },
+        { "roles": ["Any"],         "count": 2, "from": 21, "to": 22 }
+      ]
+    },
+    {
+      "name": "Thursday",
+      "open": 10,
+      "close": 22,
+      "enabled": true,
+      "rules": [
+        { "roles": ["Chef", "Mix"], "count": 2, "from": 10, "to": 12 },
+        { "roles": ["Any"],         "count": 3, "from": 12, "to": 22 },
+        { "roles": ["Any"],         "count": 2, "from": 21, "to": 22 }
+      ]
+    },
+    {
+      "name": "Friday",
+      "open": 10,
+      "close": 22,
+      "enabled": true,
+      "rules": [
+        { "roles": ["Chef", "Mix"], "count": 2, "from": 10, "to": 12 },
+        { "roles": ["Any"],         "count": 3, "from": 12, "to": 22 },
+        { "roles": ["Any"],         "count": 2, "from": 21, "to": 22 }
+      ]
+    },
+    {
+      "name": "Saturday",
+      "open": 10,
+      "close": 22,
+      "enabled": true,
+      "rules": [
+        { "roles": ["Chef", "Mix"], "count": 2, "from": 10, "to": 12 },
+        { "roles": ["Any"],         "count": 3, "from": 12, "to": 22 },
+        { "roles": ["Any"],         "count": 2, "from": 21, "to": 22 }
+      ]
+    },
+    {
+      "name": "Sunday",
+      "open": 10,
+      "close": 22,
+      "enabled": true,
+      "rules": [
+        { "roles": ["Chef", "Mix"], "count": 2, "from": 10, "to": 12 },
+        { "roles": ["Any"],         "count": 3, "from": 12, "to": 22 },
+        { "roles": ["Any"],         "count": 2, "from": 21, "to": 22 }
+      ]
+    }
+  ]
+}
