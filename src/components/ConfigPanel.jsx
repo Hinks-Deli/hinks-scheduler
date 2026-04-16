@@ -34,7 +34,7 @@ export default function ConfigPanel({
   };
   const rmDay = (i) => setDayConfigs(p => p.filter((_, j) => j !== i));
   const ue = (i, f, v) => setEmployees(p => { const n = [...p]; n[i] = { ...n[i], [f]: v }; return n; });
-  const addE = () => setEmployees(p => [...p, { name: `Staff ${p.length + 1}`, roles: [roles[0] || 'Any'], active: true }]);
+  const addE = () => setEmployees(p => [...p, { name: `Staff ${p.length + 1}`, roles: [roles[0] || 'Any'], active: true, targetHoursEnabled: false, targetHours: weeklyTarget, shiftPreference: null }]);
   const rmE = (i) => setEmployees(p => p.filter((_, j) => j !== i));
 
   const addRoleGlobal = () => {
@@ -128,6 +128,24 @@ export default function ConfigPanel({
                         onChange={e => ue(i, 'name', e.target.value)} />
                       <EmpRolePills selected={emp.roles} allRoles={roles}
                         onChange={v => ue(i, 'roles', v)} />
+                      <label className="lbl" style={{ marginLeft: 8 }}>Target</label>
+                      <input type="checkbox" checked={!!emp.targetHoursEnabled}
+                        onChange={e => ue(i, 'targetHoursEnabled', e.target.checked)}
+                        style={{ accentColor: '#5cb88a' }} />
+                      {emp.targetHoursEnabled && (
+                        <input type="number" className="nin" style={{ width: 50 }}
+                          min={0} max={120}
+                          value={emp.targetHours ?? weeklyTarget}
+                          onChange={e => ue(i, 'targetHours', Number(e.target.value))} />
+                      )}
+                      <label className="lbl" style={{ marginLeft: 8 }}>Shift</label>
+                      <select className="nin" style={{ width: 68 }}
+                        value={emp.shiftPreference || ''}
+                        onChange={e => ue(i, 'shiftPreference', e.target.value || null)}>
+                        <option value="">—</option>
+                        <option value="open">Open</option>
+                        <option value="close">Close</option>
+                      </select>
                       {employees.length > 1 && (
                         <span className="x" onClick={() => rmE(i)} style={{ marginLeft: 'auto' }}>×</span>
                       )}

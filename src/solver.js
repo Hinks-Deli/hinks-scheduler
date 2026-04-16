@@ -7,7 +7,8 @@
  * Hard constraints: maxPerDay, operating hours
  * Primary goal:     coverage rules (100 pts per satisfied hour-slot)
  * Soft constraints:  fewer working days (-5 per day), hour balance (-2 × variance)
- * Weekly target:     informational only — reported as warnings, not enforced
+ * Target hours:      per-employee soft penalty (-1 × deviation² per employee)
+ * Shift preference:  per-employee open/close preference (-8 per violation day)
  */
 
 function empMatchesRule(emp, ruleRoles) {
@@ -19,6 +20,10 @@ export function solve(days, employees, maxPerDay, weeklyTarget) {
   const activeDays = days.filter(d => d.enabled && d.close > d.open);
   const activeEmps = employees.filter(e => e.active);
   const N = activeEmps.length;
+  const empTargets = activeEmps.map(e =>
+    e.targetHoursEnabled && e.targetHours != null ? e.targetHours : weeklyTarget
+  );
+  const empShiftPref = activeEmps.map(e => e.shiftPreference || null);
 
   const empty = {
     assignments: {}, empHours: [], empDays: [],
@@ -207,6 +212,23 @@ export function solve(days, employees, maxPerDay, weeklyTarget) {
       let v = 0;
       for (let e = 0; e < N; e++) v += (empHrsRunning[e] - avg) ** 2;
       score -= (v / N) * 2;
+      // Target hours penalty: -1 × (deviation)² per employee
+      for (let e = 0; e < N; e++) {
+        const dev = empHrsRunning[e] - empTargets[e];
+        score -= dev * dev;
+      }
+      // Shift preference penalty: -8 per day working against preference
+      for (let e = 0; e < N; e++) {
+        const pref = empShiftPref[e];
+        if (!pref) continue;
+        for (let d = 0; d < dayData.length; d++) {
+          const sh = chosen[d].shifts[e];
+          if (!sh) continue;
+          const day = dayData[d].day;
+          if (pref === 'open' && sh.s !== day.open) score -= 8;
+          if (pref === 'close' && sh.e !== day.close) score -= 8;
+        }
+      }
       if (score > bestScore) { bestScore = score; bestChoice = chosen.slice(); }
       return;
     }
@@ -296,11 +318,32 @@ export function solve(days, employees, maxPerDay, weeklyTarget) {
     }
   }
 
-  // Weekly target warnings (informational only)
-  const off = activeEmps.map((e, i) => ({ name: e.name, hrs: empHours[i] }))
-    .filter(e => e.hrs !== weeklyTarget);
+  // Shift preference warnings
+  if (bestChoice) {
+    const prefMisses = [];
+    for (let e = 0; e < N; e++) {
+      const pref = empShiftPref[e];
+      if (!pref) continue;
+      const missDays = [];
+      for (let di = 0; di < dayData.length; di++) {
+        const sh = bestChoice[di].shifts[e];
+        if (!sh) continue;
+        const day = dayData[di].day;
+        if (pref === 'open' && sh.s !== day.open) missDays.push(day.name);
+        if (pref === 'close' && sh.e !== day.close) missDays.push(day.name);
+      }
+      if (missDays.length) prefMisses.push(`${activeEmps[e].name} prefers ${pref} (not met: ${missDays.join(', ')})`);
+    }
+    if (prefMisses.length) warnings.push('Shift prefs: ' + prefMisses.join('; '));
+  }
+
+  // Per-employee target warnings
+  const off = activeEmps.map((e, i) => {
+    const target = empTargets[i];
+    return { name: e.name, hrs: empHours[i], target };
+  }).filter(e => e.hrs !== e.target);
   if (off.length) {
-    warnings.push('Hours: ' + off.map(e => `${e.name} ${e.hrs}h`).join(', ') + ` (target ${weeklyTarget})`);
+    warnings.push('Hours: ' + off.map(e => `${e.name} ${e.hrs}h (target ${e.target}h)`).join(', '));
   }
 
   return { assignments, empHours, empDays, warnings, coverageByDay, splitShifts: [] };

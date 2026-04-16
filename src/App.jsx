@@ -39,7 +39,9 @@ export default function App() {
   });
   const [employees, setEmployees] = useState(() => {
     const cfg = loadConfig();
-    return cfg?.employees || deepClone(DEFAULT_EMPLOYEES);
+    return cfg?.employees
+      ? cfg.employees.map(e => ({ targetHoursEnabled: false, targetHours: DEFAULT_GLOBALS.weeklyTarget, shiftPreference: null, ...e }))
+      : deepClone(DEFAULT_EMPLOYEES);
   });
   const [dayConfigs, setDayConfigs] = useState(() => {
     const cfg = loadConfig();

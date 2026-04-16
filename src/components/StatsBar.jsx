@@ -19,7 +19,8 @@ export default React.memo(function StatsBar({ activeEmps, employees, result, wee
         const c = EMP_COLORS[gi % EMP_COLORS.length];
         const hrs = result.empHours[ei] || 0;
         const dys = result.empDays?.[ei] || 0;
-        const diff = Math.abs(hrs - weeklyTarget);
+        const target = emp.targetHoursEnabled && emp.targetHours != null ? emp.targetHours : weeklyTarget;
+        const diff = Math.abs(hrs - target);
 
         return (
           <div key={ei} className="stat-card" style={{ background: c.bg, borderColor: c.accent + '33' }}>
@@ -27,9 +28,11 @@ export default React.memo(function StatsBar({ activeEmps, employees, result, wee
               <span style={{ color: c.text, fontWeight: 700, fontSize: 11 }}>{emp.name}</span>
               <RoleBadges roles={emp.roles} small />
             </div>
-            <div className="stat-hours" style={{ color: c.accent }}>{hrs}h</div>
+            <div className="stat-hours" style={{ color: c.accent }}>
+              {hrs}h{emp.targetHoursEnabled && <span style={{ fontSize: '0.7em', opacity: 0.7 }}> / {target}h</span>}
+            </div>
             <div className="stat-meta" style={{ color: c.text + '88' }}>
-              {dys}d · {hrs === weeklyTarget ? '✓' : `${diff}h ${hrs < weeklyTarget ? 'short' : 'over'}`}
+              {dys}d · {hrs === target ? '✓' : `${diff}h ${hrs < target ? 'short' : 'over'}`}
             </div>
           </div>
         );

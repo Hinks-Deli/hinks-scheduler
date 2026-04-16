@@ -51,9 +51,14 @@ export default React.memo(function ScheduleTable({ activeDays, activeEmps, emplo
                     </td>
                   );
                 })}
-                <td className={`total ${hrs === weeklyTarget ? 'ok' : hrs < weeklyTarget ? 'under' : 'over'}`}>
-                  {hrs}h
-                </td>
+                {(() => {
+                  const target = emp.targetHoursEnabled && emp.targetHours != null ? emp.targetHours : weeklyTarget;
+                  return (
+                    <td className={`total ${hrs === target ? 'ok' : hrs < target ? 'under' : 'over'}`}>
+                      {hrs}h
+                    </td>
+                  );
+                })()}
               </tr>
             );
           })}

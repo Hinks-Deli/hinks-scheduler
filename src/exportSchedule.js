@@ -115,12 +115,13 @@ export async function exportSchedule({ activeDays, activeEmps, employees, result
 
     // Total hours
     const hrs = result.empHours[ei] || 0;
+    const target = emp.targetHoursEnabled && emp.targetHours != null ? emp.targetHours : weeklyTarget;
     const totalCell = row.getCell(totalCols);
     totalCell.value = `${hrs}h`;
     totalCell.font = {
       bold: true,
       color: {
-        argb: hrs === weeklyTarget ? 'FF2E7D32' : hrs < weeklyTarget ? 'FFE65100' : 'FFC62828',
+        argb: hrs === target ? 'FF2E7D32' : hrs < target ? 'FFE65100' : 'FFC62828',
       },
     };
     totalCell.alignment = { horizontal: 'center', vertical: 'middle' };

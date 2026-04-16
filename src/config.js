@@ -4,14 +4,14 @@ export const ALL_DAY_NAMES = [
 ];
 
 // ── Default roles ──
-export const DEFAULT_ROLES = ['Chef', 'FOH', 'Mix', 'Assembly'];
+export const DEFAULT_ROLES = ['Chef', 'FOH', 'Mix', 'Assembly', 'Owner'];
 
 // ── Default employees ──
 export const DEFAULT_EMPLOYEES = [
-  { name: 'Nico',  roles: ['Chef', 'Mix', 'FOH', 'Assembly'], active: true },
-  { name: 'Sabine', roles: ['Chef',],  active: true },
-  { name: 'Joao', roles: ['FOH', 'Assembly', 'Mix'],          active: true },
-  { name: 'Girl',  roles: ['FOH'],   active: true },
+  { name: 'Nico',  roles: ['Chef', 'Mix', 'FOH', 'Assembly', 'Owner'], active: true, targetHoursEnabled: true, targetHours: 10, shiftPreference: null },
+  { name: 'Sabine', roles: ['Chef',],  active: true, targetHoursEnabled: false, targetHours: 40, shiftPreference: null },
+  { name: 'Joao', roles: ['FOH', 'Assembly', 'Mix'],          active: true, targetHoursEnabled: false, targetHours: 40, shiftPreference: null },
+  { name: 'Girl',  roles: ['FOH'],   active: true, targetHoursEnabled: false, targetHours: 40, shiftPreference: null },
 ];
 
 // ── Default day configs ──
@@ -19,7 +19,8 @@ const LONG_DAY_RULES = [
   { roles: ['Chef'], count: 1, from: 10, to: 12 },
   { roles: ['Chef', 'Mix', 'Assembly'],         count: 2, from: 12, to: 22 },
   { roles: ['FOH'],         count: 1, from: 10, to: 22 },
-  { roles: ['Any'],         count: 2, from: 22, to: 23 },
+  { roles: ['Any'],         count: 1, from: 22, to: 23 },
+  { roles: ['Chef', 'Owner'],     count: 1, from: 22, to: 23 },
 ];
 
 export const DEFAULT_DAYS = [
